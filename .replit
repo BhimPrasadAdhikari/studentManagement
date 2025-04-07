@@ -1,0 +1,51 @@
+modules = ["c"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Student Management System"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "compile_and_run"
+
+[[workflows.workflow]]
+name = "Student Management System"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gcc -o student_mgmt main.c student.c fileio.c ui.c utils.c -Wall -Wextra && ./student_mgmt"
+
+[[workflows.workflow]]
+name = "compile_and_run"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gcc -o student_management main.c student.c fileio.c ui.c utils.c && ./student_management"
+
+[deployment]
+run = ["sh", "-c", "gcc -o student_mgmt main.c student.c fileio.c ui.c utils.c -Wall -Wextra && ./student_mgmt"]
